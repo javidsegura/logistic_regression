@@ -70,9 +70,13 @@ class LogisticRegression:
 
                   hypothesis = self.compute_hypothesis()
 
-                  y = self.y
+                  y = np.array(self.y)
 
-                  cost = -np.mean(y * np.log(hypothesis) + (1-y) * np.log(1-hypothesis))
+                  # Avoid dividing by 0
+                  epsilon = 1e-10
+                  hypothesis = np.clip(hypothesis, epsilon, 1 - epsilon)
+
+                  cost = - (1 / self.m) * np.sum(y * np.log(hypothesis) + (1-y) * np.log(1-hypothesis))
             
                   return cost
             
@@ -165,11 +169,20 @@ model = LogisticRegression(X,y,df)
 
 print(model.gradient_descent(.001,1000))
 
+print(model.cost_function())
 
-prediction = model.make_predictions(.84)
 
-print(*prediction, sep = "\n\n")
+#prediction = model.make_predictions(.84)
 
-print(model.roc())
+#print(*prediction, sep = "\n\n")
 
-print(model.optimal_treshold())
+#print(model.roc())
+
+#print(model.optimal_treshold())
+
+
+
+
+
+
+
